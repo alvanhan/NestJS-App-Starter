@@ -1,98 +1,294 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# NestJS App Service
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A robust NestJS application with RabbitMQ messaging, PostgreSQL database integration, and microservices architecture.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- **NestJS Framework**: Built with TypeScript and modern Node.js patterns
+- **RabbitMQ Integration**: Message queuing system for asynchronous communication
+- **PostgreSQL Database**: Persistent data storage with MikroORM
+- **Microservices Architecture**: Separate message consumers and producers
+- **Fastify**: High-performance web framework as Express alternative
+- **Environment Configuration**: Configurable settings via environment variables
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Architecture
 
-## Project setup
-
-```bash
-$ npm install
+```
+├── src/
+│   ├── entities/           # Database entities
+│   │   ├── user.entity.ts
+│   │   └── user-provider.entity.ts
+│   ├── rabbit/             # RabbitMQ client service
+│   │   ├── rabbit.controller.ts
+│   │   ├── rabbit.service.ts
+│   │   └── rabbit.module.ts
+│   ├── workers/            # Message consumers
+│   │   ├── log-consumer.service.ts
+│   │   └── workers.module.ts
+│   └── migrations/         # Database migrations
 ```
 
-## Compile and run the project
+## Prerequisites
 
+Before running this application, make sure you have:
+
+- **Node.js** (v18 or higher)
+- **PostgreSQL** (v12 or higher)
+- **RabbitMQ** (v3.8 or higher)
+- **npm** or **yarn**
+
+## Installation
+
+1. Clone the repository:
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone <repository-url>
+cd nest-app-service
 ```
 
-## Run tests
-
+2. Install dependencies:
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
+3. Set up environment variables:
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+cp .env.example .env
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Configure your `.env` file with:
+```env
+DATABASE_URL=postgresql://username:password@localhost:5432/nest_app
+DATABASE_DEBUG=false
+PORT=3000
+HOST=0.0.0.0
+```
 
-## Resources
+4. Set up PostgreSQL database:
+```bash
+createdb nest_app
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+5. Run database migrations:
+```bash
+npm run mikro-orm:up
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## Running the Application
 
-## Support
+### Development
+```bash
+npm run start:dev
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Production
+```bash
+npm run build
+npm run start:prod
+```
 
-## Stay in touch
+### Debug Mode
+```bash
+npm run start:debug
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## RabbitMQ Setup
+
+### Install RabbitMQ
+
+**macOS:**
+```bash
+brew install rabbitmq
+brew services start rabbitmq
+```
+
+**Ubuntu/Debian:**
+```bash
+sudo apt-get install rabbitmq-server
+sudo systemctl start rabbitmq-server
+```
+
+**Docker:**
+```bash
+docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+```
+
+### RabbitMQ Management UI
+Access the management interface at: http://localhost:15672
+- Username: `guest`
+- Password: `guest`
+
+## API Endpoints
+
+### Health Check
+```http
+GET /
+```
+
+### RabbitMQ Message Publishing
+```http
+GET /rabbit/emit
+```
+
+Publishes a test message to the RabbitMQ queue. The message will be consumed by the `LogConsumerService` and logged to the console.
+
+**Response:**
+```json
+{
+  "status": "Message sent to RabbitMQ"
+}
+```
+
+## Database Schema
+
+### User Entity
+```typescript
+{
+  id: string (UUID)
+  full_name: string
+  email?: string (unique)
+  role: UserRole (USER | ADMIN | SUPERADMIN)
+  created_at: Date
+  updated_at: Date
+}
+```
+
+### UserProvider Entity
+```typescript
+{
+  id: string (UUID)
+  provider: string
+  provider_id: string
+  user: User (relation)
+  created_at: Date
+  updated_at: Date
+}
+```
+
+## Message Queue Architecture
+
+### Publisher (RabbitService)
+- Publishes messages to RabbitMQ
+- Uses `client.emit()` for fire-and-forget messaging
+- Configured with `main_queue`
+
+### Consumer (LogConsumerService)
+- Listens for `log_message` events
+- Processes messages asynchronously
+- Logs received messages to console
+
+## Development Scripts
+
+```bash
+# Development
+npm run start:dev          # Start in watch mode
+npm run start:debug        # Start with debugging
+
+# Building
+npm run build             # Build the application
+npm run start:prod        # Start production build
+
+# Testing
+npm run test              # Run unit tests
+npm run test:watch        # Run tests in watch mode
+npm run test:cov          # Run tests with coverage
+npm run test:e2e          # Run end-to-end tests
+
+# Database
+npm run mikro-orm:create  # Create new migration
+npm run mikro-orm:up      # Run migrations
+
+# Code Quality
+npm run lint              # Run ESLint
+npm run format            # Format code with Prettier
+```
+
+## Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `DATABASE_URL` | PostgreSQL connection string | Required |
+| `DATABASE_DEBUG` | Enable database query logging | `false` |
+| `PORT` | Application port | `3000` |
+| `HOST` | Application host | `0.0.0.0` |
+
+## Project Structure
+
+```
+nest-app-service/
+├── src/
+│   ├── entities/           # Database entities
+│   ├── rabbit/             # RabbitMQ integration
+│   ├── workers/            # Message consumers
+│   ├── migrations/         # Database migrations
+│   ├── app.module.ts       # Main application module
+│   ├── app.controller.ts   # Application controller
+│   ├── app.service.ts      # Application service
+│   ├── main.ts            # Application entry point
+│   └── mikro-orm.config.ts # Database configuration
+├── test/                   # Test files
+├── eslint.config.mjs       # ESLint configuration
+├── nest-cli.json          # NestJS CLI configuration
+├── package.json           # Dependencies and scripts
+├── tsconfig.json          # TypeScript configuration
+└── README.md              # This file
+```
+
+## Technologies Used
+
+- **[NestJS](https://nestjs.com/)** - Progressive Node.js framework
+- **[Fastify](https://fastify.io/)** - Fast and low overhead web framework
+- **[MikroORM](https://mikro-orm.io/)** - TypeScript ORM for Node.js
+- **[PostgreSQL](https://postgresql.org/)** - Advanced open source database
+- **[RabbitMQ](https://rabbitmq.com/)** - Message broker
+- **[TypeScript](https://typescriptlang.org/)** - Typed JavaScript
+- **[Jest](https://jestjs.io/)** - Testing framework
+
+## Quick Start Example
+
+1. Start the application:
+```bash
+npm run start:dev
+```
+
+2. Test the health endpoint:
+```bash
+curl http://localhost:3000/
+```
+
+3. Send a message to RabbitMQ:
+```bash
+curl http://localhost:3000/rabbit/emit
+```
+
+4. Check the console logs to see the message being consumed by the worker.
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Port already in use**: If you get `EADDRINUSE` error, kill the process using:
+```bash
+lsof -ti:3000 | xargs kill -9
+```
+
+2. **Database connection issues**: Check your `DATABASE_URL` in `.env` file and ensure PostgreSQL is running.
+
+3. **RabbitMQ connection issues**: Ensure RabbitMQ is running on `localhost:5672` or update the connection settings in `rabbit.service.ts`.
+
+4. **Message handler not found**: This indicates the consumer service isn't properly registered. Ensure the `WorkersModule` is imported in `AppModule`.
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit your changes: `git commit -am 'Add some feature'`
+4. Push to the branch: `git push origin feature/your-feature`
+5. Submit a pull request
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is licensed under the UNLICENSED License.
+
+## Support
+
+For support, please open an issue in the repository or contact the development team.
