@@ -14,8 +14,7 @@ import { WorkersModule } from './workers/workers.module';
     MikroOrmModule.forRoot(mikroOrmConfig),
     MikroOrmModule.forFeature([User, UserProvider]),
     ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env', 
+      isGlobal: true    
     }),
     RabbitModule,
     WorkersModule

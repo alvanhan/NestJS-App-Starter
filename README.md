@@ -57,10 +57,19 @@ cp .env.example .env
 
 Configure your `.env` file with:
 ```env
+# Application settings
+APP_ENV=development
+APP_HOST=0.0.0.0
+APP_PORT=3000
+
+# Database settings
 DATABASE_URL=postgresql://username:password@localhost:5432/nest_app
 DATABASE_DEBUG=false
-PORT=3000
-HOST=0.0.0.0
+
+# RabbitMQ settings
+RABBITMQ_URL=amqp://localhost:5672
+RABBITMQ_QUEUE=main_queue
+RABBITMQ_QUEUE_DURABLE=false
 ```
 
 4. Set up PostgreSQL database:
@@ -206,10 +215,14 @@ npm run format            # Format code with Prettier
 
 | Variable | Description | Default |
 |----------|-------------|---------|
+| `APP_ENV` | Application environment | `development` |
+| `APP_HOST` | Application host | `0.0.0.0` |
+| `APP_PORT` | Application port | `3000` |
 | `DATABASE_URL` | PostgreSQL connection string | Required |
 | `DATABASE_DEBUG` | Enable database query logging | `false` |
-| `PORT` | Application port | `3000` |
-| `HOST` | Application host | `0.0.0.0` |
+| `RABBITMQ_URL` | RabbitMQ connection URL | `amqp://localhost:5672` |
+| `RABBITMQ_QUEUE` | RabbitMQ queue name | `main_queue` |
+| `RABBITMQ_QUEUE_DURABLE` | Whether the queue should be durable | `false` |
 
 ## Project Structure
 
