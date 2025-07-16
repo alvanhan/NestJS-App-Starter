@@ -25,7 +25,6 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         if (exception instanceof HttpException) {
             status = exception.getStatus();
             const exceptionResponse = exception.getResponse();
-            
             if (typeof exceptionResponse === 'object' && exceptionResponse !== null) {
                 const responseObj = exceptionResponse as any;
                 message = responseObj.message || message;
@@ -35,14 +34,17 @@ export class GlobalExceptionFilter implements ExceptionFilter {
             }
         } else if (exception instanceof Error) {
             message = exception.message;
+            this.logger.error(`Unexpected error: ${exception.message}`, exception.stack);
+        } else {
+            this.logger.error('Unknown error occurred', exception);
         }
 
-        const errorResponse = ResponseFormatter.fail(
-            message,
-            status,
-            errors
-        );
+        this.logger.error(`HTTP ${status} Error: ${message}`, {
+            url: request.url,
+            method: request.method,
+            errors,
+        });
 
-        response.status(status).send(errorResponse);
+        ResponseFormatter.error(response, message, status, errors);
     }
 }

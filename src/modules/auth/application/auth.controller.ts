@@ -1,4 +1,5 @@
-import { Controller, Post, Body, UseGuards, Get, Request } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Request, Res, HttpStatus } from '@nestjs/common';
+import { FastifyReply } from 'fastify';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
@@ -6,7 +7,7 @@ import { RegisterUseCase } from '../../auth/usecase/register.usecase';
 import { LoginUseCase } from '../../auth/usecase/login.usecase';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from '../infrastructure/guards/jwt-auth.guard';
-import { ResponseFormatter } from '../../../utils/response';
+import { ControllerResponseUtil } from '../../../utils/controller-response.util';
 
 @Controller('auth')
 export class AuthController {
@@ -17,70 +18,92 @@ export class AuthController {
     ) { }
 
     @Post('register')
-    async register(@Body() dto: RegisterDto) {
-        try {
-            await this.registerUseCase.execute(dto.full_name, dto.email, dto.password);
-            return ResponseFormatter.success(null, 'Logout successful');
-        } catch (error) {
-            return ResponseFormatter.fail('Registrasi failed', 400, error.message);
-        }
+    async register(@Body() dto: RegisterDto, @Res() reply: FastifyReply) {
+        await ControllerResponseUtil.handleAsync(
+            reply,
+            async () => {
+                await this.registerUseCase.execute(dto.full_name, dto.email, dto.password);
+                return null;
+            },
+            'Registration successful',
+            HttpStatus.CREATED,
+            'Registration failed'
+        );
     }
 
     @Post('login')
-    async login(@Body() dto: LoginDto, @Request() req) {
-        try {
-            const user = await this.loginUseCase.execute(dto.email, dto.password);
-            const tokens = await this.authService.generateTokens(
-                user,
-                req.headers['user-agent'],
-                req.ip
-            );
-            return ResponseFormatter.success({
-                ...tokens
-            }, 'Login successful');
-        } catch (error) {
-            return ResponseFormatter.fail('Login failed', 400, error.message);
-        }
+    async login(@Body() dto: LoginDto, @Request() req, @Res() reply: FastifyReply) {
+        await ControllerResponseUtil.handleAsync(
+            reply,
+            async () => {
+                const user = await this.loginUseCase.execute(dto.email, dto.password);
+                return await this.authService.generateTokens(
+                    user,
+                    req.headers['user-agent'],
+                    req.ip
+                );
+            },
+            'Login successful',
+            HttpStatus.OK,
+            'Login failed'
+        );
     }
 
     @Post('refresh')
-    async refreshToken(@Body() dto: RefreshTokenDto) {
-        try {
-            const result = await this.authService.refreshTokens(dto.refreshToken);
-            return ResponseFormatter.success({
-                accessToken: result.accessToken,
-                refreshToken: result.refreshToken
-            }, 'Token refreshed successfully');
-        } catch (error) {
-            return ResponseFormatter.fail('Token refresh failed', 401, error.message);
-        }
+    async refreshToken(@Body() dto: RefreshTokenDto, @Res() reply: FastifyReply) {
+        await ControllerResponseUtil.handleAsync(
+            reply,
+            async () => {
+                const result = await this.authService.refreshTokens(dto.refreshToken);
+                return {
+                    accessToken: result.accessToken,
+                    refreshToken: result.refreshToken
+                };
+            },
+            'Token refreshed successfully',
+            HttpStatus.OK,
+            'Token refresh failed',
+            HttpStatus.UNAUTHORIZED
+        );
     }
 
     @UseGuards(JwtAuthGuard)
     @Post('logout')
-    async logout(@Body() dto: RefreshTokenDto) {
-        try {
-            await this.authService.revokeRefreshToken(dto.refreshToken);
-            return ResponseFormatter.success(null, 'Logout successful');
-        } catch (error) {
-            return ResponseFormatter.fail('Logout failed', 400, error.message);
-        }
+    async logout(@Body() dto: RefreshTokenDto, @Res() reply: FastifyReply) {
+        await ControllerResponseUtil.handleAsync(
+            reply,
+            async () => {
+                await this.authService.revokeRefreshToken(dto.refreshToken);
+                return null;
+            },
+            'Logout successful',
+            HttpStatus.OK,
+            'Logout failed'
+        );
     }
 
     @UseGuards(JwtAuthGuard)
     @Post('logout-all')
-    async logoutAll(@Request() req) {
-        try {
-            await this.authService.revokeAllUserTokens(req.user.id);
-            return ResponseFormatter.success(null, 'Logged out from all devices');
-        } catch (error) {
-            return ResponseFormatter.fail('Logout all failed', 400, error.message);
-        }
+    async logoutAll(@Request() req, @Res() reply: FastifyReply) {
+        await ControllerResponseUtil.handleAsync(
+            reply,
+            async () => {
+                await this.authService.revokeAllUserTokens(req.user.id);
+                return null;
+            },
+            'Logged out from all devices',
+            HttpStatus.OK,
+            'Logout all failed'
+        );
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('me')
-    getMe(@Request() req) {
-        return ResponseFormatter.success(req.user, 'Data user');
+    getMe(@Request() req, @Res() reply: FastifyReply) {
+        ControllerResponseUtil.handle(
+            reply,
+            () => req.user,
+            'User data retrieved successfully'
+        );
     }
 }

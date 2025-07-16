@@ -22,37 +22,28 @@ export class ValidationExceptionFilter implements ExceptionFilter {
         let errors = {};
 
         if (typeof exceptionResponse === 'object' && exceptionResponse !== null) {
-            // Handle custom validation response from our CustomValidationPipe
             if (exceptionResponse.errors) {
                 message = exceptionResponse.message || 'Validation failed';
                 errors = exceptionResponse.errors;
             }
-            // Handle default class-validator errors
             else if (Array.isArray(exceptionResponse.message)) {
                 message = 'Validation failed';
                 errors = this.formatValidationErrors(exceptionResponse.message);
-            }
-            // Handle single error message
-            else if (typeof exceptionResponse.message === 'string') {
+            }else if (typeof exceptionResponse.message === 'string') {
                 message = exceptionResponse.message;
                 errors = {};
             }
         }
 
-        const errorResponse = ResponseFormatter.fail(
-            message,
-            status,
-            errors
-        );
+        this.logger.error(`Validation error: ${message}`, { errors, status });
 
-        response.status(status).send(errorResponse);
+        ResponseFormatter.fail(response, message, status, errors);
     }
 
     private formatValidationErrors(errors: string[]): Record<string, string[]> {
         const formattedErrors: Record<string, string[]> = {};
 
         errors.forEach(error => {
-            // Extract field name from error message
             const fieldMatch = error.match(/^(\w+)\s+/);
             if (fieldMatch) {
                 const field = fieldMatch[1];
@@ -61,7 +52,6 @@ export class ValidationExceptionFilter implements ExceptionFilter {
                 }
                 formattedErrors[field].push(error);
             } else {
-                // If field name can't be extracted, add to general errors
                 if (!formattedErrors.general) {
                     formattedErrors.general = [];
                 }
