@@ -9,6 +9,7 @@ import {
 } from '@mikro-orm/core';
 import { generateUuid } from '../utils';
 import { UserProvider } from './user-provider.entity';
+import { RefreshToken } from './refresh-token.entity';
 
 export enum UserRole {
     USER = 'USER',
@@ -63,4 +64,7 @@ export class User {
 
     @OneToMany(() => UserProvider, provider => provider.user)
     providers = new Array<UserProvider>();
+
+    @OneToMany(() => RefreshToken, token => token.user)
+    refreshTokens = new Array<RefreshToken>();
 }

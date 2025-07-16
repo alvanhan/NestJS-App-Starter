@@ -6,6 +6,9 @@ import {
 } from '@nestjs/platform-fastify';
 import { ConfigService } from '@nestjs/config';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { ValidationExceptionFilter } from './filters/validation-exception.filter';
+import { GlobalExceptionFilter } from './filters/global-exception.filter';
+import { CustomValidationPipe } from './pipes/custom-validation.pipe';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -26,7 +29,19 @@ async function bootstrap() {
       },
     },
   });
+  
+  // Set global prefix
   app.setGlobalPrefix('api');
+  
+  // Setup global validation pipe
+  app.useGlobalPipes(new CustomValidationPipe());
+  
+  // Setup global exception filters
+  app.useGlobalFilters(
+    new GlobalExceptionFilter(),
+    new ValidationExceptionFilter(),
+  );
+  
   await app.startAllMicroservices();
   await app.listen(port, host);
 }

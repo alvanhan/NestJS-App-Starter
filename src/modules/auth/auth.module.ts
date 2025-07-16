@@ -4,16 +4,18 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { User } from 'src/entities/user.entity';
+import { RefreshToken } from 'src/entities/refresh-token.entity';
 import { ConfigurationService } from 'src/config/configuration.service';
 import { AuthController } from './application/auth.controller';
 import { LoginUseCase } from './usecase/login.usecase';
 import { RegisterUseCase } from './usecase/register.usecase';
 import { JwtStrategy } from './infrastructure/strategies/jwt.strategy';
 import { AuthService } from './application/auth.service';
+import { RefreshTokenService } from './application/refresh-token.service';
 
 @Module({
     imports: [
-        MikroOrmModule.forFeature([User]),
+        MikroOrmModule.forFeature([User, RefreshToken]),
         PassportModule,
         JwtModule.registerAsync({
             inject: [ConfigService],
@@ -40,6 +42,7 @@ import { AuthService } from './application/auth.service';
 
         // Services
         AuthService,
+        RefreshTokenService,
     ],
     exports: []
 })

@@ -22,6 +22,7 @@ export class RegisterUseCase {
             role: UserRole.USER,
             is_active: true,
             providers: [],
+            refreshTokens: [],
         });
         await this.em.persistAndFlush(user);
         return user;
