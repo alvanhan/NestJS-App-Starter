@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Get, Request } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Request, HttpException, HttpStatus } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
@@ -43,14 +43,7 @@ export class AuthController {
                 req.ip
             );
             return ResponseFormatter.success({
-                ...tokens,
-                user: {
-                    id: user.id,
-                    email: user.email,
-                    username: user.username,
-                    full_name: user.full_name,
-                    role: user.role,
-                }
+                ...tokens
             }, 'Login successful');
         } catch (error) {
             return ResponseFormatter.fail('Login failed', 400, error.message);
@@ -63,14 +56,7 @@ export class AuthController {
             const result = await this.authService.refreshTokens(dto.refreshToken);
             return ResponseFormatter.success({
                 accessToken: result.accessToken,
-                refreshToken: result.refreshToken,
-                user: {
-                    id: result.user.id,
-                    email: result.user.email,
-                    username: result.user.username,
-                    full_name: result.user.full_name,
-                    role: result.user.role,
-                }
+                refreshToken: result.refreshToken
             }, 'Token refreshed successfully');
         } catch (error) {
             return ResponseFormatter.fail('Token refresh failed', 401, error.message);
