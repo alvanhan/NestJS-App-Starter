@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Get, Request, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Request } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
@@ -17,17 +17,10 @@ export class AuthController {
     ) { }
 
     @Post('register')
-    async register(@Body() dto: RegisterDto, @Request() req) {
+    async register(@Body() dto: RegisterDto) {
         try {
-            const user = await this.registerUseCase.execute(dto.full_name, dto.email, dto.password);
-            const tokens = await this.authService.generateTokens(
-                user,
-                req.headers['user-agent'],
-                req.ip
-            );
-            return ResponseFormatter.success({
-                ...tokens
-            }, 'Registrasi successful');
+            await this.registerUseCase.execute(dto.full_name, dto.email, dto.password);
+            return ResponseFormatter.success(null, 'Logout successful');
         } catch (error) {
             return ResponseFormatter.fail('Registrasi failed', 400, error.message);
         }
@@ -65,7 +58,7 @@ export class AuthController {
 
     @UseGuards(JwtAuthGuard)
     @Post('logout')
-    async logout(@Body() dto: RefreshTokenDto, @Request() req) {
+    async logout(@Body() dto: RefreshTokenDto) {
         try {
             await this.authService.revokeRefreshToken(dto.refreshToken);
             return ResponseFormatter.success(null, 'Logout successful');

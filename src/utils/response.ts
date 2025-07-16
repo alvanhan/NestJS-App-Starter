@@ -29,24 +29,35 @@ export class ResponseFormatter {
     }
 
     static paginate<T>(
+        res: any,
         items: T[],
         meta: PaginationMeta,
         message = 'Success',
         statusCode = 200
-    ): PaginatedResponse<T> {
-        return {
+    ): void {
+        return res.status(statusCode).send({
             status: 'success',
             statusCode,
             message,
             data: { items, meta },
-        };
+        });
     }
 
     static fail(message = 'Fail', statusCode = 400, error?: any): ApiResponse {
-        return { status: 'fail', statusCode, message, error };
+        return {
+            status: 'fail',
+            statusCode,
+            message,
+            error,
+        };
     }
 
     static error(message = 'Internal Server Error', statusCode = 500, error?: any): ApiResponse {
-        return { status: 'error', statusCode, message, error };
+        return {
+            status: 'error',
+            statusCode,
+            message,
+            error,
+        };
     }
 }

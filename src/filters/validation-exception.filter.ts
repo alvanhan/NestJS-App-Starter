@@ -18,9 +18,6 @@ export class ValidationExceptionFilter implements ExceptionFilter {
         const response = ctx.getResponse<FastifyReply>();
         const status = exception.getStatus();
         const exceptionResponse = exception.getResponse() as any;
-
-        this.logger.debug('Validation Exception Response:', JSON.stringify(exceptionResponse, null, 2));
-
         let message = 'Validation failed';
         let errors = {};
 

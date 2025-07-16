@@ -35,21 +35,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
             }
         } else if (exception instanceof Error) {
             message = exception.message;
-            
-            // Log the full error stack for debugging
-            this.logger.error(
-                `Exception occurred: ${exception.message}`,
-                exception.stack,
-                `${request.method} ${request.url}`
-            );
         }
-
-        // Log error details
-        this.logger.error(
-            `HTTP ${status} Error: ${message}`,
-            `${request.method} ${request.url}`,
-            exception instanceof Error ? exception.stack : 'Unknown error'
-        );
 
         const errorResponse = ResponseFormatter.fail(
             message,
