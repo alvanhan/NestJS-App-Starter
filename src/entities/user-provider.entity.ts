@@ -1,4 +1,3 @@
-// src/entities/user-provider.entity.ts
 import {
     Entity,
     Property,
@@ -6,21 +5,19 @@ import {
     ManyToOne,
     Enum,
 } from '@mikro-orm/core';
-import { v4 as uuidv4 } from 'uuid';
+import { generateUuid } from '../utils';
 import { User } from './user.entity';
 
 export enum AuthProvider {
     GOOGLE = 'GOOGLE',
-    GITHUB = 'GITHUB',
     FACEBOOK = 'FACEBOOK',
-    APPLE = 'APPLE',
-    LOCAL = 'LOCAL',
+    LOCAL = 'LOCAL'
 }
 
 @Entity({ tableName: 'user_providers' })
 export class UserProvider {
     @PrimaryKey({ type: 'uuid' })
-    id: string = uuidv4();
+    id: string = generateUuid();
 
     @ManyToOne(() => User)
     user: User;

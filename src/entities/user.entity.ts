@@ -7,7 +7,7 @@ import {
     OneToMany,
     OptionalProps,
 } from '@mikro-orm/core';
-import { v4 as uuidv4 } from 'uuid';
+import { generateUuid } from '../utils';
 import { UserProvider } from './user-provider.entity';
 
 export enum UserRole {
@@ -21,7 +21,7 @@ export class User {
     [OptionalProps]?: 'created_at' | 'updated_at';
 
     @PrimaryKey({ type: 'uuid' })
-    id: string = uuidv4();
+    id: string = generateUuid();
 
     @Property()
     full_name: string;
