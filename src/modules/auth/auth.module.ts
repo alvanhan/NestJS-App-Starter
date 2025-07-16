@@ -1,8 +1,10 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { User } from 'src/entities/user.entity';
+import { ConfigurationService } from 'src/config/configuration.service';
 import { AuthController } from './application/auth.controller';
 import { LoginUseCase } from './usecase/login.usecase';
 import { RegisterUseCase } from './usecase/register.usecase';
@@ -13,10 +15,18 @@ import { AuthService } from './application/auth.service';
     imports: [
         MikroOrmModule.forFeature([User]),
         PassportModule,
-        JwtModule.register({
-        secret: 'SECRET_JWT',
-        signOptions: { expiresIn: '1d' },
-    }),],
+        JwtModule.registerAsync({
+            inject: [ConfigService],
+            useFactory: (configService: ConfigService) => {
+                const config = new ConfigurationService(configService);
+                const jwtConfig = config.jwt;
+                return {
+                    secret: jwtConfig.secret,
+                    signOptions: { expiresIn: jwtConfig.expiration },
+                };
+            },
+        }),
+    ],
     controllers: [
         AuthController,
     ],
