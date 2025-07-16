@@ -25,46 +25,28 @@ export interface PaginatedResponse<T> extends ApiResponse {
 
 export class ResponseFormatter {
     static success<T>(data: T, message = 'Success', statusCode = 200): ApiResponse<T> {
-        return {
-            status: 'success',
-            statusCode,
-            message,
-            data,
-        };
+        return { status: 'success', statusCode, message, data };
     }
 
     static paginate<T>(
         items: T[],
         meta: PaginationMeta,
         message = 'Success',
-        statusCode = 200,
+        statusCode = 200
     ): PaginatedResponse<T> {
         return {
             status: 'success',
             statusCode,
             message,
-            data: {
-                items,
-                meta,
-            },
+            data: { items, meta },
         };
     }
 
     static fail(message = 'Fail', statusCode = 400, error?: any): ApiResponse {
-        return {
-            status: 'fail',
-            statusCode,
-            message,
-            error,
-        };
+        return { status: 'fail', statusCode, message, error };
     }
 
     static error(message = 'Internal Server Error', statusCode = 500, error?: any): ApiResponse {
-        return {
-            status: 'error',
-            statusCode,
-            message,
-            error,
-        };
+        return { status: 'error', statusCode, message, error };
     }
 }

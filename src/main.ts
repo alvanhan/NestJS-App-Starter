@@ -16,7 +16,7 @@ async function bootstrap() {
   const port = configService.get<number>('APP_PORT', 3000);
   const host = configService.get<string>('APP_HOST', '0.0.0.0');
 
-    app.connectMicroservice<MicroserviceOptions>({
+  app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
     options: {
       urls: [configService.get<string>('RABBITMQ_URL', 'amqp://localhost:5672')],
@@ -26,7 +26,7 @@ async function bootstrap() {
       },
     },
   });
-
+  app.setGlobalPrefix('api');
   await app.startAllMicroservices();
   await app.listen(port, host);
 }

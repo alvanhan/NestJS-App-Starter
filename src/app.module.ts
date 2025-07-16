@@ -8,6 +8,7 @@ import mikroOrmConfig from './mikro-orm.config';
 import { ConfigModule } from '@nestjs/config';
 import { RabbitModule } from './rabbit/rabbit.module';
 import { WorkersModule } from './workers/workers.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { WorkersModule } from './workers/workers.module';
       isGlobal: true    
     }),
     RabbitModule,
-    WorkersModule
+    WorkersModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
