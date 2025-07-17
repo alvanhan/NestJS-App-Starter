@@ -1,28 +1,28 @@
 # NestJS App Service
 
-Aplikasi NestJS yang robust dengan fitur JWT authentication, email notifications, RabbitMQ messaging, PostgreSQL database, dan clean architecture patterns.
+A robust NestJS application with JWT authentication, email notifications, RabbitMQ messaging, PostgreSQL database, and clean architecture patterns.
 
-## Fitur Utama
+## Key Features
 
-- **NestJS Framework** dengan TypeScript
-- **JWT Authentication** dengan access dan refresh tokens
-- **Email Notifications** dengan template HTML dan SMTP
-- **RabbitMQ** untuk message queuing
-- **PostgreSQL** dengan MikroORM
-- **Clean Architecture** dengan domain-driven design
-- **UUID v7** untuk performa database yang lebih baik
-- **Fastify** sebagai web framework
+- **NestJS Framework** with TypeScript
+- **JWT Authentication** with access and refresh tokens
+- **Email Notifications** with HTML templates and SMTP
+- **RabbitMQ** for message queuing
+- **PostgreSQL** with MikroORM
+- **Clean Architecture** with domain-driven design
+- **UUID v7** for better database performance
+- **Fastify** as web framework
 
 ## Prerequisites
 
-Pastikan Anda telah menginstall:
+Make sure you have installed:
 
-- **Node.js** (v18 atau lebih tinggi)
-- **PostgreSQL** (v12 atau lebih tinggi)
-- **RabbitMQ** (v3.8 atau lebih tinggi)
-- **npm** atau **yarn**
+- **Node.js** (v18 or higher)
+- **PostgreSQL** (v12 or higher)
+- **RabbitMQ** (v3.8 or higher)
+- **npm** or **yarn**
 
-## Instalasi
+## Installation
 
 1. Clone repository:
 ```bash
@@ -40,7 +40,7 @@ npm install
 cp .env.example .env
 ```
 
-4. Edit file `.env` dengan konfigurasi Anda:
+4. Edit `.env` file with your configuration:
 ```env
 # Application settings
 APP_ENV=development
@@ -84,12 +84,12 @@ NODE_ENV=development
 createdb nest_app
 ```
 
-6. Jalankan database migrations:
+6. Run database migrations:
 ```bash
 npm run mikro-orm:up
 ```
 
-## Menjalankan Aplikasi
+## Running the Application
 
 ### Development
 ```bash
@@ -129,13 +129,13 @@ docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
 ```
 
 ### RabbitMQ Management UI
-Akses management interface di: http://localhost:15672
+Access management interface at: http://localhost:15672
 - Username: `guest`
 - Password: `guest`
 
 ## Quick Start
 
-1. Jalankan aplikasi:
+1. Start the application:
 ```bash
 npm run start:dev
 ```
@@ -145,7 +145,7 @@ npm run start:dev
 curl http://localhost:3000/
 ```
 
-3. Register user baru:
+3. Register new user:
 ```bash
 curl -X POST http://localhost:3000/api/auth/register \
   -H "Content-Type: application/json" \
@@ -169,13 +169,13 @@ curl -X POST http://localhost:3000/api/auth/login \
 ## API Endpoints
 
 ### Authentication
-- `POST /api/auth/register` - Register user baru
+- `POST /api/auth/register` - Register new user
 - `POST /api/auth/login` - Login user
 - `POST /api/auth/refresh` - Refresh access token
 - `GET /api/auth/me` - Get user profile
 - `GET /api/auth/verify-email` - Verify email
 - `POST /api/auth/logout` - Logout
-- `POST /api/auth/logout-all` - Logout dari semua device
+- `POST /api/auth/logout-all` - Logout from all devices
 
 ### Other
 - `GET /` - Health check
@@ -186,7 +186,7 @@ curl -X POST http://localhost:3000/api/auth/login \
 ```bash
 npm run start:dev          # Start development mode
 npm run start:debug        # Start debug mode
-npm run build             # Build aplikasi
+npm run build             # Build application
 npm run start:prod        # Start production mode
 npm run test              # Run tests
 npm run mikro-orm:create  # Create migration
@@ -199,20 +199,20 @@ npm run format            # Format code
 
 ### Common Issues
 
-1. **Port sudah digunakan**:
+1. **Port already in use**:
 ```bash
 lsof -ti:3000 | xargs kill -9
 ```
 
-2. **Database connection error**: Cek `DATABASE_URL` di file `.env`
+2. **Database connection error**: Check `DATABASE_URL` in `.env` file
 
-3. **RabbitMQ connection error**: Pastikan RabbitMQ running di `localhost:5672`
+3. **RabbitMQ connection error**: Make sure RabbitMQ is running on `localhost:5672`
 
-4. **JWT token invalid**: Cek `JWT_SECRET` dan `JWT_REFRESH_SECRET` di `.env`
+4. **JWT token invalid**: Check `JWT_SECRET` and `JWT_REFRESH_SECRET` in `.env`
 
-5. **Email tidak terkirim**: Cek konfigurasi SMTP di `.env`
+5. **Email not sending**: Check SMTP configuration in `.env`
 
-### SMTP Configuration untuk Email
+### SMTP Configuration for Email
 
 ```bash
 SMTP_HOST=your-smtp-server.com
@@ -226,118 +226,11 @@ SMTP_FROM=noreply@yourdomain.com
 **SMTP Providers:**
 - **Gmail**: `smtp.gmail.com:587`
 - **Outlook**: `smtp-mail.outlook.com:587`
-- **Mailtrap**: `sandbox.smtp.mailtrap.io:2525` (untuk testing)
+- **Mailtrap**: `sandbox.smtp.mailtrap.io:2525` (for testing)
 
 ## License
 
 UNLICENSED
-
-## Support
-
-Untuk support, silakan buka issue di repository atau hubungi development team. settings if email notifications don't work
-
-### Email Configuration
-
-For email notifications to work properly, configure these environment variables:
-
-```bash
-SMTP_HOST=your-smtp-server.com
-SMTP_PORT=587
-SMTP_SECURE=true
-SMTP_USER=your-email@domain.com
-SMTP_PASSWORD=your-app-password
-SMTP_FROM=noreply@yourdomain.com
-```
-
-**Popular SMTP Providers:**
-- **Gmail**: `smtp.gmail.com:587` (requires app password)
-- **Outlook**: `smtp-mail.outlook.com:587`
-- **SendGrid**: `smtp.sendgrid.net:587`
-- **Mailtrap** (for testing): `sandbox.smtp.mailtrap.io:2525`
-
-### Database Migration Issues
-
-If you encounter migration issues:
-
-1. **Check migration status**:
-```bash
-npm run mikro-orm migration:status
-```
-
-2. **Create new migration**:
-```bash
-npm run mikro-orm:create
-```
-
-3. **Run pending migrations**:
-```bash
-npm run mikro-orm:up
-```
-
-4. **Reset database** (development only):
-```bash
-npm run mikro-orm migration:down
-```
-
-## Recent Updates
-
-**New Features:**
-- **Email Notification System**: Complete email module with templates and SMTP integration
-- **Refresh Token Support**: Secure token refresh mechanism with device tracking
-- **Email Verification**: Automated email verification workflow
-- **Welcome Emails**: Automated welcome email after email verification
-- **Template System**: HTML email templates with variable substitution
-- **Dual Token System**: Access tokens (short-lived) and refresh tokens (long-lived)
-- **Device Tracking**: User agent and IP address tracking for security
-- **Token Revocation**: Individual and bulk token revocation support
-- **Global Exception Handling**: Centralized error handling with custom filters
-- **Validation Pipeline**: Request validation with custom validation pipes
-
-**New Dependencies:**
-- `@nestjs/jwt` - JWT token handling
-- `@nestjs/passport` - Authentication middleware
-- `@nestjs/microservices` - RabbitMQ integration
-- `@types/nodemailer` - Email sending types
-- `nodemailer` - Email sending library
-- `amqp-connection-manager` - RabbitMQ connection management
-- `amqplib` - RabbitMQ client library
-- `bcrypt` - Password hashing
-- `passport` - Authentication framework
-- `passport-jwt` - JWT strategy for Passport
-- `uuidv7` - UUID v7 generation
-- `class-validator` - Validation decorators
-- `class-transformer` - Object transformation
-
-**Configuration Changes:**
-- Updated `.env.example` with comprehensive configuration
-- Added JWT refresh token settings
-- Added SMTP configuration for email notifications
-- Added email-related environment variables
-- Changed default port from 9000 to 3000
-- Enhanced database debug logging
-
-**Architecture Improvements:**
-- Added `src/modules/email-notification/` - Complete email notification module
-- Added `src/entities/refresh-token.entity.ts` - Refresh token storage
-- Added `src/filters/` - Global exception filters
-- Added `src/pipes/` - Custom validation pipes
-- Added `src/workers/email-notification-consumer.service.ts` - Email worker
-- Enhanced `src/config/` - Comprehensive configuration service
-- Enhanced `src/utils/` - UUID v7 utilities and response helpers
-- Implemented clean architecture patterns with domain/application/infrastructure layers
-- Added comprehensive documentation and examples
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/your-feature`
-3. Commit your changes: `git commit -am 'Add some feature'`
-4. Push to the branch: `git push origin feature/your-feature`
-5. Submit a pull request
-
-## License
-
-This project is licensed under the UNLICENSED License.
 
 ## Support
 
