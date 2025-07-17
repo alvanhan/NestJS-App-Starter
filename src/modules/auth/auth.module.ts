@@ -6,9 +6,11 @@ import { PassportModule } from '@nestjs/passport';
 import { User } from 'src/entities/user.entity';
 import { RefreshToken } from 'src/entities/refresh-token.entity';
 import { ConfigurationService } from 'src/config/configuration.service';
+import { RabbitModule } from 'src/rabbit/rabbit.module';
 import { AuthController } from './application/auth.controller';
 import { LoginUseCase } from './usecase/login.usecase';
 import { RegisterUseCase } from './usecase/register.usecase';
+import { VerifyEmailUseCase } from './usecase/verify-email.usecase';
 import { JwtStrategy } from './infrastructure/strategies/jwt.strategy';
 import { AuthService } from './application/auth.service';
 import { RefreshTokenService } from './application/refresh-token.service';
@@ -17,6 +19,7 @@ import { RefreshTokenService } from './application/refresh-token.service';
     imports: [
         MikroOrmModule.forFeature([User, RefreshToken]),
         PassportModule,
+        RabbitModule,
         JwtModule.registerAsync({
             inject: [ConfigService],
             useFactory: (configService: ConfigService) => {
@@ -36,6 +39,7 @@ import { RefreshTokenService } from './application/refresh-token.service';
         // Use cases
         LoginUseCase,
         RegisterUseCase,
+        VerifyEmailUseCase,
 
         // Strategies
         JwtStrategy,

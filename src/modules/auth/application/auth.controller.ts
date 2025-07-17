@@ -1,10 +1,11 @@
-import { Controller, Post, Body, UseGuards, Get, Request, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Request, Res, HttpStatus, Query } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RegisterUseCase } from '../../auth/usecase/register.usecase';
 import { LoginUseCase } from '../../auth/usecase/login.usecase';
+import { VerifyEmailUseCase } from '../../auth/usecase/verify-email.usecase';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from '../infrastructure/guards/jwt-auth.guard';
 import { ControllerResponseUtil } from '../../../utils/controller-response.util';
@@ -14,6 +15,7 @@ export class AuthController {
     constructor(
         private readonly registerUseCase: RegisterUseCase,
         private readonly loginUseCase: LoginUseCase,
+        private readonly verifyEmailUseCase: VerifyEmailUseCase,
         private readonly authService: AuthService,
     ) { }
 
@@ -104,6 +106,33 @@ export class AuthController {
             reply,
             () => req.user,
             'User data retrieved successfully'
+        );
+    }
+
+    @Get('verify-email')
+    async verifyEmail(@Query('token') token: string, @Res() reply: FastifyReply) {
+        await ControllerResponseUtil.handleAsync(
+            reply,
+            async () => {
+                if (!token) {
+                    throw new Error('Verification token is required');
+                }
+                
+                const user = await this.verifyEmailUseCase.execute(token);
+                return {
+                    message: 'Email verified successfully',
+                    user: {
+                        id: user.id,
+                        email: user.email,
+                        fullName: user.full_name,
+                        emailVerified: user.email_verified
+                    }
+                };
+            },
+            'Email verification successful',
+            HttpStatus.OK,
+            'Email verification failed',
+            HttpStatus.BAD_REQUEST
         );
     }
 }

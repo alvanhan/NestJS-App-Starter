@@ -23,6 +23,21 @@ export interface RabbitMQConfig {
     queueDurable: boolean;
 }
 
+export interface SmtpConfig {
+    host: string;
+    port: number;
+    secure: boolean;
+    user: string;
+    password: string;
+    from: string;
+}
+
+export interface AppEmailConfig {
+    appName: string;
+    appBaseUrl: string;
+    supportEmail: string;
+}
+
 export class ConfigurationService {
     constructor(private configService: ConfigService) {}
 
@@ -58,6 +73,25 @@ export class ConfigurationService {
         };
     }
 
+    get smtp(): SmtpConfig {
+        return {
+            host: this.configService.get<string>('SMTP_HOST', 'smtp.gmail.com'),
+            port: this.configService.get<number>('SMTP_PORT', 465),
+            secure: this.configService.get<string>('SMTP_SECURE', 'true') === 'true',
+            user: this.configService.get<string>('SMTP_USER', ''),
+            password: this.configService.get<string>('SMTP_PASSWORD', ''),
+            from: this.configService.get<string>('SMTP_FROM', ''),
+        };
+    }
+
+    get appEmail(): AppEmailConfig {
+        return {
+            appName: this.configService.get<string>('APP_NAME', 'NestJS App'),
+            appBaseUrl: this.configService.get<string>('APP_BASE_URL', 'http://localhost:3000'),
+            supportEmail: this.configService.get<string>('SUPPORT_EMAIL', 'support@example.com'),
+        };
+    }
+
     validateConfig(): void {
         // Validate JWT configuration
         if (!this.configService.get<string>('JWT_SECRET')) {
@@ -78,6 +112,19 @@ export class ConfigurationService {
         const port = this.configService.get<string>('APP_PORT');
         if (port && isNaN(parseInt(port))) {
             throw new Error('APP_PORT must be a valid number');
+        }
+
+        // Validate SMTP configuration
+        if (!this.configService.get<string>('SMTP_USER')) {
+            console.warn('SMTP_USER is not configured. Email notifications will not work.');
+        }
+        
+        if (!this.configService.get<string>('SMTP_PASSWORD')) {
+            console.warn('SMTP_PASSWORD is not configured. Email notifications will not work.');
+        }
+        
+        if (!this.configService.get<string>('SMTP_FROM')) {
+            console.warn('SMTP_FROM is not configured. Email notifications will not work.');
         }
     }
 }

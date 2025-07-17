@@ -16,7 +16,7 @@ export class RabbitService {
             transport: Transport.RMQ,
             options: {
                 urls: [this.configService.get<string>('RABBITMQ_URL', 'amqp://localhost:5672')],
-                queue: this.configService.get<string>('RABBITMQ_QUEUE'),
+                queue: this.configService.get<string>('RABBITMQ_QUEUE', 'main_queue'),
                 queueOptions: { 
                     durable: this.configService.get<string>('RABBITMQ_QUEUE_DURABLE', 'false') === 'true'
                 },

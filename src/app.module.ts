@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { RabbitModule } from './rabbit/rabbit.module';
 import { WorkersModule } from './workers/workers.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { EmailNotificationModule } from './modules/email-notification/email-notification.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { AuthModule } from './modules/auth/auth.module';
     }),
     RabbitModule,
     WorkersModule,
-    AuthModule
+    AuthModule,
+    EmailNotificationModule
   ],
   controllers: [AppController],
   providers: [AppService],

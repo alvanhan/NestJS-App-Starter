@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to {{APP_NAME}}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .content {
+            margin-bottom: 30px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .button:hover {
+            background-color: #218838;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 14px;
+        }
+        .features {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .feature-item {
+            margin: 10px 0;
+        }
+        .feature-item:before {
+            content: "✓ ";
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">{{APP_NAME}}</div>
+        </div>
+        
+        <div class="content">
+            <h2>Welcome to {{APP_NAME}}!</h2>
+            <p>Hello {{fullName}},</p>
+            
+            <p>Congratulations! Your account has been successfully created and verified. We're excited to have you as part of our community!</p>
+            
+            <div class="features">
+                <h3>What's Next?</h3>
+                <div class="feature-item">Explore our platform features</div>
+                <div class="feature-item">Complete your profile setup</div>
+                <div class="feature-item">Connect with other users</div>
+                <div class="feature-item">Start using our services</div>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="{{APP_URL}}" class="button">Get Started</a>
+            </div>
+            
+            <p>If you have any questions or need assistance, don't hesitate to reach out to our support team.</p>
+            
+            <p>Thank you for joining {{APP_NAME}}!</p>
+            
+            <p>Best regards,<br>
+            The {{APP_NAME}} Team</p>
+        </div>
+        
+        <div class="footer">
+            <p>This email was sent to you because you successfully registered for an account at {{APP_NAME}}.</p>
+            <p>If you have any questions, please contact us at {{SUPPORT_EMAIL}}</p>
+            <p>&copy; 2025 {{APP_NAME}}. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
