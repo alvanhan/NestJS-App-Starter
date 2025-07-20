@@ -1,0 +1,63 @@
+### Test User List Endpoints
+
+# Variables
+@baseUrl = http://localhost:3000/api
+@accessToken = YOUR_JWT_TOKEN_HERE
+
+### 1. Register new user (for testing)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "full_name": "Admin User",
+  "email": "admin@example.com",
+  "password": "SecurePassword123!"
+}
+
+### 2. Login to get access token
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "SecurePassword123!"
+}
+
+### 3. Get current user info
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{accessToken}}
+
+### 4. List users (basic) - REQUIRES ADMIN/SUPERADMIN ROLE
+GET {{baseUrl}}/auth/users
+Authorization: Bearer {{accessToken}}
+
+### 5. List users with pagination
+GET {{baseUrl}}/auth/users?page=1&limit=5
+Authorization: Bearer {{accessToken}}
+
+### 6. List users with search
+GET {{baseUrl}}/auth/users?search=admin&page=1&limit=10
+Authorization: Bearer {{accessToken}}
+
+### 7. List users with filters
+GET {{baseUrl}}/auth/users?emailVerified=true&isActive=true&sortBy=created_at&sortOrder=desc
+Authorization: Bearer {{accessToken}}
+
+### 8. List users with all parameters
+GET {{baseUrl}}/auth/users?page=1&limit=10&search=test&sortBy=full_name&sortOrder=asc&emailVerified=true&isActive=true
+Authorization: Bearer {{accessToken}}
+
+### 9. Get user statistics - REQUIRES ADMIN/SUPERADMIN ROLE
+GET {{baseUrl}}/auth/users/stats
+Authorization: Bearer {{accessToken}}
+
+### 10. Test validation errors
+GET {{baseUrl}}/auth/users?page=0&limit=150
+Authorization: Bearer {{accessToken}}
+
+### 11. Test without authentication (should fail)
+GET {{baseUrl}}/auth/users
+
+### 12. Test with invalid role (should fail if user is not ADMIN/SUPERADMIN)
+GET {{baseUrl}}/auth/users
+Authorization: Bearer {{accessToken}}

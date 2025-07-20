@@ -3,11 +3,16 @@ import { FastifyReply } from 'fastify';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { ListUsersQueryDto } from './dto/list-users-query.dto';
 import { RegisterUseCase } from '../../auth/usecase/register.usecase';
 import { LoginUseCase } from '../../auth/usecase/login.usecase';
 import { VerifyEmailUseCase } from '../../auth/usecase/verify-email.usecase';
+import { ListUsersUseCase } from '../../auth/usecase/list-users.usecase';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from '../infrastructure/guards/jwt-auth.guard';
+import { RolesGuard } from '../infrastructure/guards/roles.guard';
+import { Roles } from '../../../decorators/roles.decorator';
+import { UserRole } from '../../../entities/user.entity';
 import { ControllerResponseUtil } from '../../../utils/controller-response.util';
 
 @Controller('auth')
@@ -16,6 +21,7 @@ export class AuthController {
         private readonly registerUseCase: RegisterUseCase,
         private readonly loginUseCase: LoginUseCase,
         private readonly verifyEmailUseCase: VerifyEmailUseCase,
+        private readonly listUsersUseCase: ListUsersUseCase,
         private readonly authService: AuthService,
     ) { }
 
@@ -106,6 +112,36 @@ export class AuthController {
             reply,
             () => req.user,
             'User data retrieved successfully'
+        );
+    }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(UserRole.ADMIN, UserRole.SUPERADMIN)
+    @Get('users')
+    async listUsers(@Query() queryDto: ListUsersQueryDto, @Res() reply: FastifyReply) {
+        await ControllerResponseUtil.handleAsync(
+            reply,
+            async () => {
+                return await this.listUsersUseCase.execute(queryDto);
+            },
+            'Users retrieved successfully',
+            HttpStatus.OK,
+            'Failed to retrieve users'
+        );
+    }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(UserRole.ADMIN, UserRole.SUPERADMIN)
+    @Get('users/stats')
+    async getUserStats(@Res() reply: FastifyReply) {
+        await ControllerResponseUtil.handleAsync(
+            reply,
+            async () => {
+                return await this.listUsersUseCase.getUserStats();
+            },
+            'User statistics retrieved successfully',
+            HttpStatus.OK,
+            'Failed to retrieve user statistics'
         );
     }
 

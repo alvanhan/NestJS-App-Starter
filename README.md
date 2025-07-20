@@ -4,15 +4,30 @@ A robust NestJS application with JWT authentication, email notifications, Rabbit
 
 ## Key Features
 
-- **NestJS Framework** with TypeScript
-- **JWT Authentication** with access and refresh tokens
-- **Email Notifications** with HTML templates and SMTP
-- **RabbitMQ** for message queuing
-- **PostgreSQL** with MikroORM
-- **Clean Architecture** with domain-driven design
-- **UUID v7** for better database performance
-- **Fastify** as web framework
 
+## Migration & Seeder
+
+**Migration & Seeder**
+
+ENGLISH:
+- To run migrations:
+  ```bash
+  npm run mikro-orm:up
+  ```
+- To run seeders:
+  ```bash
+  npm run seed
+  ```
+
+INDONESIA:
+- Untuk menjalankan migration:
+  ```bash
+  npm run mikro-orm:up
+  ```
+- Untuk menjalankan seeder:
+  ```bash
+  npm run seed
+  ```
 ## Prerequisites
 
 Make sure you have installed:

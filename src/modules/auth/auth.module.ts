@@ -11,7 +11,9 @@ import { AuthController } from './application/auth.controller';
 import { LoginUseCase } from './usecase/login.usecase';
 import { RegisterUseCase } from './usecase/register.usecase';
 import { VerifyEmailUseCase } from './usecase/verify-email.usecase';
+import { ListUsersUseCase } from './usecase/list-users.usecase';
 import { JwtStrategy } from './infrastructure/strategies/jwt.strategy';
+import { RolesGuard } from './infrastructure/guards/roles.guard';
 import { AuthService } from './application/auth.service';
 import { RefreshTokenService } from './application/refresh-token.service';
 
@@ -40,9 +42,13 @@ import { RefreshTokenService } from './application/refresh-token.service';
         LoginUseCase,
         RegisterUseCase,
         VerifyEmailUseCase,
+        ListUsersUseCase,
 
         // Strategies
         JwtStrategy,
+
+        // Guards
+        RolesGuard,
 
         // Services
         AuthService,

@@ -107,7 +107,7 @@ export class EmailNotificationService {
      * Builds verification URL.
      */
     private buildVerificationUrl(token: string): string {
-        const baseUrl = this.configService.get<string>('APP_BASE_URL', 'http://localhost:3000');
+        const baseUrl = this.configService.get<string>('APP_BASE_URL', 'http://localhost:9000');
         return `${baseUrl}/auth/verify-email?token=${token}`;
     }
 }
