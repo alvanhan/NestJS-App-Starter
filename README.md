@@ -18,16 +18,6 @@ ENGLISH:
   ```bash
   npm run seed
   ```
-
-INDONESIA:
-- Untuk menjalankan migration:
-  ```bash
-  npm run mikro-orm:up
-  ```
-- Untuk menjalankan seeder:
-  ```bash
-  npm run seed
-  ```
 ## Prerequisites
 
 Make sure you have installed:
