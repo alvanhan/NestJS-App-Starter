@@ -9,7 +9,6 @@ A robust NestJS application with JWT authentication, email notifications, Rabbit
 
 **Migration & Seeder**
 
-ENGLISH:
 - To run migrations:
   ```bash
   npm run mikro-orm:up
